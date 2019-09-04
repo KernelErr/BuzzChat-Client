@@ -10,7 +10,7 @@ BuzzChat Client是一款基于Electron的开源聊天室客户端，依赖于Buz
 ```bash
 npm install
 ```
-此时会安装所需要的依赖（应该只需要Electron，你也可以不运行上述命令，如果你已经全局安装了Electron的话）。
+此时会安装所需要的依赖。
 依赖安装完成后，请打开src/main.js文件，修改serveraddress的值为socket.io服务端的地址如：http://localhost:3001/ 。
 最后只需要运行：
 ```bash

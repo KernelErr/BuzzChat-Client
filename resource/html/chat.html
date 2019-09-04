@@ -68,6 +68,7 @@
   <script src="https://cdn.bootcss.com/socket.io/2.2.0/socket.io.js"></script>
   <script>
     const { ipcRenderer } = require('electron');
+    var Mousetrap = require('mousetrap');
     var nickname  = "";
     nickname = ipcRenderer.sendSync('getnickname');
     var serveraddress = "";
@@ -115,5 +116,15 @@
       scrollDom = document.getElementById('chat-container');
       scrollDom.scrollTop = scrollDom.scrollHeight;
     }
+
+    Mousetrap.bind('enter', function() {
+      var msg = $("#m").val();
+      if (msg.length != 0) {
+        msg = nickname + ': ' + msg;
+        msg = ipcRenderer.sendSync('encrypt', msg);
+        socket.emit("message", msg);
+        $("#m").data("emojioneArea").setText("");
+      }
+    });
   </script>
 </html>
