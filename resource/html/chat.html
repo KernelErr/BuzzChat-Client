@@ -104,17 +104,49 @@
 
     $('form').submit(function () {
       var msg = $("#m").val();
-      msg = nickname + ': ' + msg;
-      msg = ipcRenderer.sendSync('encrypt', msg);
-      socket.emit("message", msg);
-      $("#m").data("emojioneArea").setText("");
-      return false
+      if(msg[0] == 'f' && msg[1] == 'l' && msg[2] == 's' && msg[3] == '@'){
+        var filepath = "";
+        var filecontent = "";
+        for(var i = 4; i < msg.length; i++){
+          filepath += msg[i];
+        }
+        var fs = require('fs');
+        var temp = filepath.split('/').length - 1;
+        var filename = filepath.split('/')[temp];
+        msg = nickname + " 发送了一个文件： " + filename;
+        msg = ipcRenderer.sendSync('encrypt', msg);
+        socket.emit("message", msg);
+        var ss = require('socket.io-stream');
+        var stream = ss.createStream();
+        ss(socket).emit("sendfile", stream, {name: filename});
+        fs.createReadStream(filepath).pipe(stream);
+        $("#m").data("emojioneArea").setText("");
+        return false
+      }else{
+        msg = nickname + ': ' + msg;
+        msg = ipcRenderer.sendSync('encrypt', msg);
+        socket.emit("message", msg);
+        $("#m").data("emojioneArea").setText("");
+        return false
+      }
     })
 
     function addLine(msg) {
       $('#messages').append($('<li>').text(msg));
       scrollDom = document.getElementById('chat-container');
       scrollDom.scrollTop = scrollDom.scrollHeight;
+      if(msg.includes("发送了一个文件：")){
+        setTimeout(function() {
+          callback(null);
+        }, 10000);
+        var filename = msg.split("： ")[1];
+        var ss = require('socket.io-stream');
+        var stream = ss.createStream();
+        ss(socket).emit("recvfile", stream);
+        var fs = require('fs');
+        stream.pipe(fs.createWriteStream("./ChatFiles/" + filename));
+        addLine("正在接收文件，若文件大小非0则已经传输完成：" + filename);
+      }
     }
 
     Mousetrap.bind('enter', function() {
