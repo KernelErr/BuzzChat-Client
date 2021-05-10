@@ -1,9 +1,11 @@
 # BuzzChat-Client
+
+**警告：本程序的依赖（Swiper）受到 CVE-2021-23370 漏洞影响，如需使用源码请自行升级依赖。**
+
 BuzzChat Client是一款基于Electron的开源聊天室客户端，依赖于BuzzChat Server。
 
 ## 程序简介
 本程序主体是基于Javascript编写，界面实现是HTML语言，主要使用了[Electron](https://electronjs.org/ "Electron")搭建应用。因为初学了Photoshop、Node.js以及HTML，想巩固一下自己的能力，于是写出了这个应用。
-软件作者是北邮大一新生Kevin Li，Twitter主页是[@ChinaKevinLi](https://twitter.com/ChinaKevinLi "@ChinaKevinLi")。
 
 ## 使用说明
 从GitHub下载源码后，你需要在电脑上安装Node.js，并支持npm。首先需要安装依赖，切换到源码根目录下运行：
